@@ -1540,17 +1540,8 @@
             { title: 'Nokos Promo', desc: 'Admin murah! Nokos Indo Rp5.000, Luar Rp15.000', icon: '📞' },
             { title: 'Paket Premium', desc: 'Paket Premium 1: Rp17.000, Paket Premium 2: Rp20.000, Package Pro, harga admin murah!', icon: '🏆' }
         ];
-        const CATEGORIES = ['Semua', 'Alight Motion', 'CapCut', 'Akun AM', 'Akun CC', 'Voucher', 'voucher tree', 'Nokos', 'Paket Premium'];
-        const MENU = [
-            { icon: 'alight.png', label: 'Alight' },
-            { icon: 'capcut.png', label: 'CapCut' },
-            { icon: 'akunam.png', label: 'Akun AM' },
-            { icon: 'akuncc.png', label: 'Akun CC' },
-            { icon: 'voucher.png', label: 'Voucher' },
-            { icon: 'tree.png', label: 'voucher tree' },
-            { icon: 'nokos.png', label: 'Nokos' },
-            { icon: 'paket1.png', label: 'Paket Premium' }
-        ];
+        let CATEGORIES = ['Semua'];
+        let MENU = [];
         const DEFAULT_DB = { user: { name: 'Nama Anda', phone: '08*******', email: 'emailanda@gmail.com', pin: '123456', balance: 0, photo: '', memberSince: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }, transactions: [], products: PRODUCTS, bulletins: BULLETINS, timerSettings: { durationSeconds: 2380 } };
         function loadDB(){ return JSON.parse(JSON.stringify({...DEFAULT_DB,user:{name:'Pengunjung',phone:'',email:'',pin:'',balance:0,photo:'',memberSince:''},transactions:[],products:[],bulletins:[]})); }
         let db=loadDB(), currentUser=db.user, currentProduct=null, currentCategory='Semua', voucherActive=false, timerInterval=null, pendingTopUp=null;
@@ -1907,6 +1898,16 @@
       window.applyVoucher=function(){voucherActive=false;const m=document.getElementById('voucherMessage');if(m){m.textContent='Voucher tersedia setelah integrasi database.';m.style.color='#64748b';}updateTotal();};
       window.saveProfile=function(){showNotif('Pembaruan profil sedang dipindahkan ke backend Supabase.','error');};
       if(!configured)console.warn('Donway: isi supabase-config.js dengan URL dan key publik Supabase.');
+      // Katalog produk dan kategori selalu dibaca dari backend; tidak menggunakan kategori/produk contoh statis.
+      fetch('/api/catalog',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('Katalog gagal dimuat');return r.json();}).then(catalog=>{
+        const cats=Array.isArray(catalog.categories)?catalog.categories:[];
+        const prods=Array.isArray(catalog.products)?catalog.products:[];
+        CATEGORIES=['Semua',...cats.map(c=>c.name)];
+        MENU=cats.map(c=>({icon:(prods.find(p=>p.category_id===c.id&&p.icon)?.icon)||'logo.png',label:c.name}));
+        db.products=prods.map(p=>({id:p.id,name:p.name,description:p.description||'',price:Number(p.price)||0,stok:Number(p.stock_quantity)||0,stock_quantity:Number(p.stock_quantity)||0,category:p.category||'Lainnya',category_id:p.category_id,icon:p.icon||'logo.png',banner:p.banner||p.icon||'logo.png'}));
+        renderMenu();renderCategories();renderProducts();
+      }).catch(err=>console.warn('Donway catalog:',err.message));
+
     })();
     </script>
 </body>
