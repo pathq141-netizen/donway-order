@@ -10,5 +10,17 @@ export default async function handler(req,res){
   ]);
   if(activities.error)throw activities.error;
   return json(res,200,{data:{users,blocked,orders,pendingTopups,products,activities:activities.data||[]}});
- }catch(e){return fail(res,{status:500,code:'SUMMARY_FAILED',message:'Tidak dapat memuat ringkasan dashboard.'});}
+} catch (e) {
+console.error('[DONWAY SUMMARY ERROR]', {
+message: e?.message,
+code: e?.code,
+details: e?.details,
+hint: e?.hint
+});
+
+return fail(res, {
+status: 500,
+code: 'SUMMARY_FAILED',
+message: 'Tidak dapat memuat ringkasan dashboard.'
+});
 }
