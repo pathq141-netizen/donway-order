@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Donway - KOIN Store (Aman)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            background: #0A2647;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #f8fafc;
+            min-height: 100vh;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* AUTH PAGES */
+        .auth-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0A2647;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .auth-card {
+            background: white;
+            width: 90%;
+            max-width: 380px;
+            border-radius: 25px;
+            padding: 25px 20px;
+            margin: auto;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .auth-logo h1 {
+            color: #0A2647;
+            font-size: 28px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 15px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .auth-tab.active {
+            background: #0A2647;
+            color: white;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .date-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .date-select {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            background: white;
+        }
+
+        /* SLIDER BANNER */
+        .slider-container {
+            margin: 15px 15px 10px 15px;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+        }
+
+        .slider-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .slider-slide {
+            flex: 0 0 100%;
+            height: 100%;
+        }
+
+        .slider-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 8px;
+            margin-bottom: 5px;
+        }
+
+        .slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: #205295;
+            width: 20px;
+            border-radius: 10px;
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .slider-arrow:hover {
+            background: rgba(0,0,0,0.8);
+        }
+
+        .slider-arrow.left {
+            left: 10px;
+        }
+
+        .slider-arrow.right {
+            right: 10px;
+        }
+
+        .slider-arrow i {
+            pointer-events: none;
+        }
+
+        /* ANNOUNCEMENT */
+        .announcement-marquee {
+            margin: 5px 15px 8px 15px;
+            background: linear-gradient(135deg, #fef9e6 0%, #fff7e6 100%);
+            border-radius: 20px;
+            padding: 6px 10px;
+            border: 1px solid #ffe6b3;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .marquee-wrapper {
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 11px;
+            font-weight: 500;
+            color: #b85c00;
+        }
+        
+        .marquee-text {
+            display: inline-block;
+            animation: scrollText 20s linear infinite;
+            padding-right: 20px;
+        }
+        
+        .marquee-text span {
+            display: inline-block;
+            padding: 0 30px 0 0;
+        }
+        
+        .marquee-text i {
+            margin: 0 4px;
+            color: #ff9900;
+        }
+        
+        @keyframes scrollText {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* MODAL KOMPLAIN */
+        .komplain-modal .modal-content {
+            text-align: center;
+        }
+        
+        .komplain-icon {
+            font-size: 50px;
+            margin: 10px 0;
+        }
+        
+        .komplain-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0A2647;
+            margin-bottom: 10px;
+        }
+        
+        .komplain-message {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .komplain-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .komplain-buttons .contact-btn {
+            flex: 1;
+            margin: 0;
+        }
+
+        /* SLIDER FOTO PRODUK */
+        .product-photo-slider {
+            margin: 10px 0 15px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f1f5f9;
+            position: relative;
+        }
+        .product-photo-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
+        .product-photo-slides {
+            display: flex;
+            transition: transform 0.4s ease-out;
+            height: 100%;
+        }
+        .product-photo-slide {
+            flex: 0 0 100%;
+            height: 100%;
+        }
+        .product-photo-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #e2e8f0;
+        }
+        .product-photo-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .product-photo-arrow:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        .product-photo-arrow.left {
+            left: 8px;
+        }
+        .product-photo-arrow.right {
+            right: 8px;
+        }
+        .product-photo-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 6px;
+            margin-bottom: 4px;
+        }
+        .product-photo-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .product-photo-dot.active {
+            background: #205295;
+            width: 18px;
+            border-radius: 10px;
+        }
+
+        /* Header */
+        .header {
+            background: #0A2647;
+            color: white;
+            padding: 15px;
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .profile-pic {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            border: 2px solid white;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic input {
+            display: none;
+        }
+
+        .profile-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .profile-info p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+
+        /* Saldo Card */
+        .saldo-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 10px 12px;
+        }
+
+        .saldo-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .saldo-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .saldo-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .saldo-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: white;
+            color: #0A2647;
+            border: none;
+            padding: 6px 0;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            cursor: pointer;
+        }
+
+        .action-btn.small {
+            flex: none;
+            padding: 5px 10px;
+        }
+
+        /* Voucher */
+        .voucher {
+            background: #205295;
+            color: white;
+            margin: 10px 15px;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .voucher-code {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 3px 0;
+        }
+
+        /* Bulletin */
+        .bulletin {
+            background: white;
+            margin: 10px 15px;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .bulletin-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .bulletin-icon {
+            width: 28px;
+            height: 28px;
+            background: #205295;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .bulletin-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #0A2647;
+            flex: 1;
+        }
+
+        .bulletin-item {
+            display: flex;
+            gap: 8px;
+            padding: 6px;
+            border-bottom: 1px solid #eee;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .bulletin-item:last-child {
+            border-bottom: none;
+        }
+
+        .bulletin-media {
+            width: 30px;
+            height: 30px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .bulletin-text h4 {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .bulletin-text p {
+            font-size: 10px;
+            color: #64748b;
+        }
+
+        /* Search */
+        .search {
+            margin: 0 15px 10px;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 20px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 12px;
+            background: transparent;
+        }
+
+        /* Categories */
+        .categories {
+            padding: 0 15px 10px;
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .category-chip {
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #0A2647;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .category-chip.active {
+            background: #205295;
+            color: white;
+            border: none;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            padding: 0 15px 15px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 12px;
+            padding: 10px 5px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+        }
+
+        .menu-icon {
+            font-size: 24px;
+            margin-bottom: 3px;
+            min-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-icon img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+
+        .menu-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        /* Products */
+        .products {
+            padding: 0 15px 70px;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .products-header h3 {
+            font-size: 14px;
+            color: #0A2647;
+        }
+
+        .products-header span {
+            font-size: 11px;
+            color: #205295;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+        }
+
+        .product-icon {
+            font-size: 32px;
+            margin-bottom: 4px;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-icon img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .product-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0A2647;
+            margin-bottom: 3px;
+        }
+
+        .product-price {
+            font-size: 13px;
+            font-weight: 700;
+            color: #205295;
+        }
+
+        /* Stok Badge */
+        .product-stok {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+        .product-stok.habis {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            background: white;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-around;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 420px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 10px;
+        }
+
+        .nav-item.active {
+            background: #205295;
+            color: white;
+        }
+
+        .nav-icon {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 350px;
+            border-radius: 20px;
+            padding: 15px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0A2647;
+        }
+
+        .close-btn {
+            font-size: 20px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #205295;
+        }
+
+        .form-input.readonly {
+            background: #f8fafc;
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            background: #205295;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .timer-display {
+            font-size: 42px;
+            text-align: center;
+            margin: 20px 0;
+            color: #205295;
+            font-weight: 700;
+            font-family: monospace;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .contact-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .wa-btn {
+            background: #25D366;
+            color: white;
+        }
+
+        .telegram-btn {
+            background: #0088cc;
+            color: white;
+        }
+
+        .gray-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .link-box {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 8px 0;
+            font-size: 11px;
+            word-break: break-all;
+            border: 1px solid #e2e8f0;
+            white-space: pre-line;
+        }
+
+        .history-item {
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .history-icon {
+            width: 30px;
+            height: 30px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .history-details {
+            flex: 1;
+        }
+
+        .history-title {
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .history-date {
+            font-size: 9px;
+            color: #94a3b8;
+        }
+
+        .history-amount {
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .amount-positive { color: #059669; }
+        .amount-negative { color: #dc2626; }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: none;
+            font-size: 12px;
+            font-weight: 600;
+            border-left: 4px solid #205295;
+        }
+
+        .konfirmasi-box {
+            background: #f0f9ff;
+            border: 2px solid #205295;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .konfirmasi-box h3 {
+            color: #0A2647;
+            margin-bottom: 10px;
+        }
+
+        .konfirmasi-box p {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .konfirmasi-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .konfirmasi-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-ya {
+            background: #205295;
+            color: white;
+        }
+
+        .btn-belum {
+            background: #dc2626;
+            color: white;
+        }
+
+        .notif-box {
+            text-align: center;
+            padding: 20px 10px;
+        }
+
+        .notif-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .notif-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+
+        .notif-message {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .notif-ok-btn {
+            background: #205295;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        /* 2 METODE PEMBAYARAN */
+        .payment-methods {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .payment-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+        }
+        .payment-claim {
+            background: #205295;
+            color: white;
+        }
+        .payment-wa {
+            background: #25D366;
+            color: white;
+        }
+
+        /* LAPORAN BUG */
+        .bug-report-box {
+            margin-top: 15px;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid #ffcccc;
+        }
+        .bug-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #dc2626;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bug-title i {
+            font-size: 16px;
+        }
+        .bug-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ffcccc;
+            border-radius: 10px;
+            font-size: 12px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+        .bug-textarea:focus {
+            outline: none;
+            border-color: #dc2626;
+        }
+        .file-upload-area {
+            margin: 10px 0;
+            position: relative;
+        }
+        .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: white;
+            border: 1px dashed #dc2626;
+            border-radius: 10px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #dc2626;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .file-label:hover {
+            background: #fff0f0;
+        }
+        .file-label i {
+            font-size: 14px;
+        }
+        #bugFileInput {
+            display: none;
+        }
+        .file-info {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+            text-align: center;
+            word-break: break-all;
+        }
+        .submit-bug-btn {
+            background: #dc2626;
+            margin-top: 10px;
+        }
+        .submit-bug-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* PASSWORD CHAT AI - TANPA URL */
+        .password-modal .modal-content {
+            text-align: center;
+        }
+        .password-modal .password-icon {
+            font-size: 50px;
+            margin: 10px 0;
+            color: #6C63FF;
+        }
+        .password-modal .password-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0A2647;
+            margin-bottom: 10px;
+        }
+        .password-modal .password-sub {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .password-modal .form-input {
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 8px;
+            font-weight: 700;
+        }
+        .password-modal .submit-btn {
+            background: #6C63FF;
+            margin-top: 10px;
+        }
+        .password-modal .submit-btn:hover {
+            background: #5a52e0;
+        }
+        .password-modal .error-text {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* Hilangkan pengelola sandi browser */
+        input[type="password"] {
+            -webkit-text-security: disc;
+        }
+
+        /* CHAT DONWAY LIVE - HIJAU */
+        .chat-live-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .chat-live-btn:hover {
+            background: #1da85c;
+            transform: scale(1.02);
+        }
+        .chat-live-btn i {
+            font-size: 18px;
+        }
+
+        /* LAYANAN LAINNYA */
+        .layanan-lainnya-btn {
+            background: #FF6B00;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+        .layanan-lainnya-btn:hover {
+            background: #e85e00;
+            transform: scale(1.02);
+        }
+        .layanan-lainnya-btn i {
+            font-size: 18px;
+        }
+
+        /* CHAT DONWAY GLOBAL - BIRU PUTIH + BUMI */
+        .chat-global-btn {
+            background: #1a8cff;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            margin-top: 8px;
+            box-shadow: 0 2px 8px rgba(26, 140, 255, 0.3);
+        }
+        .chat-global-btn:hover {
+            background: #0d6efd;
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(26, 140, 255, 0.4);
+        }
+        .chat-global-btn i {
+            font-size: 18px;
+        }
+        .chat-global-btn .fa-globe {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <!-- AUTH CONTAINER -->
+    <div id="authContainer" class="auth-container" style="display: flex;">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <h1>Donway</h1>
+                <p>KOIN Store</p>
+            </div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('login')" id="loginTab">Login</div>
+                <div class="auth-tab" onclick="switchTab('register')" id="registerTab">Register</div>
+            </div>
+            <div id="loginForm" class="auth-form active">
+                <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="loginEmail" placeholder="Email"></div>
+                <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="loginPassword" placeholder="Password"></div>
+                <button class="submit-btn" onclick="handleLogin()" style="margin-top: 10px;">Login</button>
+            </div>
+            <div id="registerForm" class="auth-form">
+                <div class="form-group"><label class="form-label">Nama Lengkap</label><input type="text" class="form-input" id="regName" placeholder="Nama lengkap"></div>
+                <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="regEmail" placeholder="Email"></div>
+                <div class="form-group"><label class="form-label">No. HP</label><input type="text" class="form-input" id="regPhone" placeholder="No. HP"></div>
+                <div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" id="regPassword" placeholder="Password"></div>
+                <div class="form-group"><label class="form-label">Konfirmasi Password</label><input type="password" class="form-input" id="regConfirm" placeholder="Konfirmasi password"></div>
+                <div class="form-group"><label class="form-label">Tanggal Lahir</label><div class="date-row"><select class="date-select" id="regDay"><option value="">Tgl</option></select><select class="date-select" id="regMonth"><option value="">Bln</option></select><select class="date-select" id="regYear"><option value="">Thn</option></select></div></div>
+                <div class="form-group"><label class="form-label">PIN (6 digit)</label><input type="password" class="form-input" id="regPin" maxlength="6" placeholder="PIN"></div>
+                <button class="submit-btn" onclick="handleRegister()" style="margin-top: 10px;">Register</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="mainContent">
+            <div class="header">
+                <div class="profile-row">
+                    <div class="profile-pic" onclick="document.getElementById('photoUpload').click()">
+                        <img id="profileImage" src="" alt="" style="display: none;"><span id="profileIcon">👤</span>
+                        <input type="file" id="photoUpload" accept="image/*" onchange="uploadPhoto(this)">
+                    </div>
+                    <div class="profile-info"><h3 id="profileName">Budi Santoso</h3><p id="profilePhone">081234567890</p></div>
+                </div>
+                <div class="saldo-card">
+                    <div class="saldo-row"><span class="saldo-label">Saldo</span><span class="saldo-amount" id="mainBalance">Rp 0</span></div>
+                    <div class="saldo-actions"><button class="action-btn" onclick="showModal('topUpModal')">💰 Isi🪙</button><button class="action-btn" onclick="showModal('transferModal')">↗️ Hapus koin </button><button class="action-btn" onclick="showModal('withdrawModal')">⬇️ Hapus2</button></div>
+                </div>
+            </div>
+            <div class="voucher"><div>NEW UPDATE</div><div class="voucher-code">banner-voucher-channel</div><div>update: 27 feb 2026</div></div>
+
+            <!-- SLIDER BANNER -->
+            <div class="slider-container" id="bannerSlider">
+                <div class="slider-wrapper">
+                    <div class="slider-arrow left" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></div>
+                    <div class="slider-arrow right" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></div>
+                    <div class="slider-slides" id="sliderSlides">
+                        <div class="slider-slide"><img src="banner1.png" alt="Banner 1" onerror="this.src='https://via.placeholder.com/400x200?text=Banner+1'"></div>
+                        <div class="slider-slide"><img src="banner2.png" alt="Banner 2" onerror="this.src='https://via.placeholder.com/400x200?text=Banner+2'"></div>
+                        <div class="slider-slide"><img src="banner3.png" alt="Banner 3" onerror="this.src='https://via.placeholder.com/400x200?text=Banner+3'"></div>
+                        <div class="slider-slide"><img src="banner4.png" alt="Banner 4" onerror="this.src='https://via.placeholder.com/400x200?text=Banner+4'"></div>
+                        <div class="slider-slide"><img src="banner5.png" alt="Banner 5" onerror="this.src='https://via.placeholder.com/400x200?text=Banner+5'"></div>
+                        <div class="slider-slide"><img src="banner6.png" alt="Banner 6" onerror="this.src='https://via.placeholder.com/400x200?text=Banner+6'"></div>
+                    </div>
+                </div>
+                <div class="slider-dots" id="sliderDots">
+                    <span class="slider-dot active" onclick="goToSlide(0)"></span>
+                    <span class="slider-dot" onclick="goToSlide(1)"></span>
+                    <span class="slider-dot" onclick="goToSlide(2)"></span>
+                    <span class="slider-dot" onclick="goToSlide(3)"></span>
+                    <span class="slider-dot" onclick="goToSlide(4)"></span>
+                    <span class="slider-dot" onclick="goToSlide(5)"></span>
+                </div>
+            </div>
+
+            <!-- ANNOUNCEMENT -->
+            <div class="announcement-marquee">
+                <div class="marquee-wrapper">
+                    <div class="marquee-text">
+                        <span>✨ ANNOUNCEMENT ✨</span>
+                        <span>🎉 Promo Spesial Akhir Bulan! Dapatkan Voucher Diskon 5K untuk semua produk premium! 🎉</span>
+                        <span>🎫 voucher hanya bisa di pakai satu kali saja! 🔥</span>
+                        <span>📢 Follow WA Channel untuk info update terbaru & kode voucher menarik! 📢</span>
+                        <span>💎 Koin bisa ditukar dengan Akun Premium & Voucher Spesial! 💎</span>
+                        <span>✨ ANNOUNCEMENT ✨</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bulletin">
+                <div class="bulletin-header"><div class="bulletin-icon">📢</div><div class="bulletin-title">Pengumuman</div><button class="action-btn small" onclick="showAllBulletins()">Lihat</button></div>
+                <div id="bulletinList"></div>
+            </div>
+            <div class="search"><div class="search-box"><span>🔍</span><input type="text" id="searchInput" placeholder="Cari produk..." oninput="searchProducts()"></div></div>
+            <div class="categories" id="categories"></div>
+            <div class="menu-grid" id="menuGrid"></div>
+            <div class="products"><div class="products-header"><h3>Produk</h3><span id="productCount">0 produk</span></div><div class="products-grid" id="productsGrid"></div></div>
+        </div>
+        <div id="historyContent" style="display: none; padding: 15px; padding-bottom: 70px;"><div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;"><div style="font-size: 22px; cursor: pointer;" onclick="showPage('home')">←</div><h3 style="color: #0A2647; font-size: 16px;">Riwayat</h3></div><div id="transactionHistory"></div></div>
+        <div id="promoContent" style="display: none; padding: 15px; padding-bottom: 70px;"><div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;"><div style="font-size: 22px; cursor: pointer;" onclick="showPage('home')">←</div><h3 style="color: #0A2647; font-size: 16px;">Promo</h3></div><div id="promoList"></div></div>
+        <div id="profileContent" style="display: none; padding: 15px; padding-bottom: 70px;"><div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;"><div style="font-size: 22px; cursor: pointer;" onclick="showPage('home')">←</div><h3 style="color: #0A2647; font-size: 16px;">Profil</h3></div><div style="background: white; border-radius: 15px; padding: 20px;"><div style="text-align: center; margin-bottom: 20px;"><div class="profile-pic" style="width: 70px; height: 70px; margin: 0 auto;" onclick="document.getElementById('profilePhotoUpload').click()"><img id="profileImageLarge" src="" alt="" style="display: none;"><span id="profileIconLarge">👤</span><input type="file" id="profilePhotoUpload" accept="image/*" onchange="uploadProfilePhoto(this)"></div></div>
+            <div class="form-group"><label class="form-label">Nama</label><input type="text" class="form-input" id="editName"></div>
+            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="editEmail"></div>
+            <div class="form-group"><label class="form-label">No. HP</label><input type="text" class="form-input" id="editPhone"></div>
+            <div class="form-group"><label class="form-label">PIN Lama (6 digit)</label><input type="password" class="form-input" id="editOldPin" maxlength="6" placeholder="Masukkan PIN lama(untuk bikin pin baru)" autocomplete="off"></div>
+            <div class="form-group"><label class="form-label">PIN Baru (6 digit)</label><input type="password" class="form-input" id="editNewPin" maxlength="6" placeholder="PIN baru 6 digit" autocomplete="off"></div>
+            <div class="form-group"><label class="form-label">Konfirmasi PIN Baru</label><input type="password" class="form-input" id="editConfirmPin" maxlength="6" placeholder="Ulangi PIN baru" autocomplete="off"></div>
+            <div class="form-group"><label class="form-label">Tanggal Bergabung</label><div class="form-input readonly" id="memberSince">-</div></div>
+            <div class="form-group"><label class="form-label">INFO</label>
+                <div style="display: flex; gap: 8px;">
+                    <button class="submit-btn" style="background: #25D366; flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="followChannel()"><i class="fab fa-whatsapp"></i> WA</button>
+                    <button class="submit-btn" style="background: #0088cc; flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="contactTelegram('Halo admin, saya butuh bantuan')"><i class="fab fa-telegram"></i> Telegram</button>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <button class="submit-btn" style="background: #6C63FF; flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="openPasswordModal()"><i class="fas fa-robot"></i> Chat AI</button>
+                </div>
+                <!-- CHAT DONWAY LIVE - HIJAU -->
+                <div style="margin-top: 8px;">
+                    <button class="chat-live-btn" onclick="openChatDonwayLive()">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Chat Donway Live</span>
+                        <i class="fas fa-comment-lines" style="font-size: 16px;"></i>
+                    </button>
+                </div>
+                <!-- LAYANAN LAINNYA -->
+                <div style="margin-top: 8px;">
+                    <button class="layanan-lainnya-btn" onclick="openLayananLainnya()">
+                        <i class="fas fa-store"></i>
+                        <span>Layanan Lainnya</span>
+                        <i class="fas fa-shopping-bag" style="font-size: 16px;"></i>
+                    </button>
+                </div>
+                <!-- CHAT DONWAY GLOBAL - BIRU PUTIH + BUMI -->
+                <div style="margin-top: 8px;">
+                    <button class="chat-global-btn" onclick="openChatDonwayGlobal()">
+                        <i class="fas fa-globe"></i>
+                        <span>Chat Donway Global</span>
+                        <i class="fas fa-comment" style="font-size: 16px;"></i>
+                    </button>
+                </div>
+            </div>
+            <div style="margin-top: 15px; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-radius: 12px; padding: 12px; border: 1px solid #e2e8f0;">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 5px;">
+                    <div style="width: 36px; height: 36px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fab fa-whatsapp" style="color: white; font-size: 18px;"></i>
+                    </div>
+                    <div style="flex: 1;">
+                        <p style="font-size: 11px; color: #666; margin-bottom: 2px;">Customer Service (CS)</p>
+                        <p style="font-size: 15px; font-weight: 700; color: #0A2647; letter-spacing: 0.5px;">+62 896-7395-5168</p>
+                    </div>
+                    <div style="width: 34px; height: 34px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #e2e8f0; transition: all 0.2s;" onclick="copyCSNumber('+6289673955168')" title="Salin nomor">
+                        <i class="fas fa-copy" style="color: #205295; font-size: 14px;"></i>
+                    </div>
+                </div>
+                <p style="font-size: 10px; color: #94a3b8; text-align: center; margin-top: 5px;">👆 Klik icon copy untuk menyalin nomor CS</p>
+            </div>
+            <div class="bug-report-box">
+                <div class="bug-title"><i class="fas fa-bug"></i> LAPORAN BUG & MASALAH ORDER</div>
+                <textarea class="bug-textarea" id="bugReportText" placeholder="Jelaskan bug & masalah order yang Anda temukan..."></textarea>
+                <div class="file-upload-area">
+                    <label class="file-label" onclick="document.getElementById('bugFileInput').click()">
+                        <i class="fas fa-upload"></i> Upload File (Foto/Video/Dokumen)
+                    </label>
+                    <input type="file" id="bugFileInput" accept="*/*" onchange="handleBugFileSelect(this)">
+                    <div class="file-info" id="bugFileInfo">Belum ada file dipilih</div>
+                </div>
+                <button class="submit-btn submit-bug-btn" onclick="sendBugReport()"><i class="fas fa-paper-plane"></i> Kirim Laporan Bug</button>
+            </div>
+            <button class="submit-btn" onclick="saveProfile()">Simpan Profil</button>
+            <button class="submit-btn" style="background: #dc2626; margin-top: 10px;" onclick="logout()">Logout</button>
+        </div>
+        </div>
+        <div id="allBulletinsContent" style="display: none; padding: 15px; padding-bottom: 70px;"><div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;"><div style="font-size: 22px; cursor: pointer;" onclick="hideAllBulletins()">←</div><h3 style="color: #0A2647; font-size: 16px;">Semua Pengumuman</h3></div><div id="allBulletinsList"></div></div>
+        <div class="bottom-nav"><div class="nav-item active" onclick="showPage('home', this)"><div class="nav-icon"><i class="fas fa-home"></i></div><div>Beranda</div></div><div class="nav-item" onclick="showPage('history', this)"><div class="nav-icon"><i class="fas fa-history"></i></div><div>Riwayat</div></div><div class="nav-item" onclick="showPage('promo', this)"><div class="nav-icon"><i class="fas fa-tag"></i></div><div>Promo</div></div><div class="nav-item" onclick="showPage('profile', this)"><div class="nav-icon"><i class="fas fa-user"></i></div><div>Profil</div></div></div>
+    </div>
+
+    <!-- MODAL PASSWORD CHAT AI - TANPA URL, TANPA PENGELOLA SANDI -->
+    <div class="modal password-modal" id="passwordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">🔐 Verifikasi</span>
+                <span class="close-btn" onclick="closeModal('passwordModal')">×</span>
+            </div>
+            <div class="password-icon"><i class="fas fa-robot"></i></div>
+            <div class="password-title">Chat AI</div>
+            <div class="password-sub">Masukkan password untuk mengakses Chat AI</div>
+            <div class="form-group">
+                <input type="password" class="form-input" id="chatAIPassword" maxlength="20" placeholder="••••••••" autocomplete="off" onkeypress="if(event.key==='Enter') verifyPassword()">
+            </div>
+            <div class="error-text" id="passwordError">❌ Password salah!</div>
+            <button class="submit-btn" onclick="verifyPassword()"><i class="fas fa-unlock"></i> Buka Chat AI</button>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div class="modal" id="produkTidakTersediaModal"><div class="modal-content"><div class="modal-header"><span class="modal-title">⚠️ INFORMASI</span><span class="close-btn" onclick="closeModal('produkTidakTersediaModal')">×</span></div><div class="notif-box"><div class="notif-icon">⚠️</div><div class="notif-title">INFORMASI📢</div><div class="notif-message">⚠️ PERINGATAN PENTING<br><br>Saldo, profil, histori, dan data akun tersimpan pada perangkat yang digunakan.<br><br>❌ Jangan hapus data aplikasi Donway.<br>❌ Jangan reset aplikasi Donway.<br>❌ Jangan hapus penyimpanan aplikasi Donway.<br><br>Menghapus data aplikasi dapat menyebabkan seluruh data akun hilang permanen.<br><br>💸 Saldo yang hilang akibat penghapusan data aplikasi tidak dapat dikembalikan dan tidak mendapatkan refund.<br><br>📌 Risiko ditanggung pengguna.<br><br>⚠️ Selama masih menggunakan aplikasi Donway, jangan hapus data aplikasi dalam bentuk apa pun..<br>Lanjutkan jika paham & mengerti.</div><button class="notif-ok-btn" onclick="closeModal('produkTidakTersediaModal')">OK</button></div></div></div>
+    <div class="modal" id="topUpModal"><div class="modal-content"><div class="modal-header"><span class="modal-title">Isi koin</span><span class="close-btn" onclick="closeModal('topUpModal')">×</span></div><div class="form-group"><label class="form-label">Jumlah</label><input type="number" class="form-input" id="topUpAmount" placeholder="Maks Rp 20.000"></div><div class="form-group"><label class="form-label">Ajukan</label><select class="form-input" id="topUpMethod"><option>KOIN I</option><option>KOIN II</option><option>KOIN III</option></select></div><button class="submit-btn" onclick="startTopUp()">Ajukan Isi koin</button></div></div>
+    <div class="modal" id="waitTimerModal"><div class="modal-content"><div class="modal-header"><span class="modal-title" id="waitTitle">⏳ Menunggu Pembayaran</span><span class="close-btn" onclick="cancelTopUp()">×</span></div><div class="timer-display" id="timerDisplay">00:00:00</div><p style="text-align: center; margin-bottom: 15px; font-size: 12px;">Silakan ajukan ke 🪙:</p><div class="link-box" style="text-align: center;"><strong>KOIN I/II/III</strong><br>peringatan⚠️: jangan tutup halaman ini sebelum waktunya habis.</div><p style="font-size: 10px; color: #666; text-align: center; margin-top: 10px;">Setelah Ajukan, akan muncul konfirmasi</p></div></div>
+    <div class="modal" id="konfirmasiSaldoModal"><div class="modal-content"><div class="modal-header"><span class="modal-title">🔔 KONFIRMASI</span><span class="close-btn" onclick="closeModal('konfirmasiSaldoModal')">×</span></div><div class="konfirmasi-box"><h3>APAKAH KOIN SUDAH MASUK?</h3><p style="font-size: 16px; font-weight: bold;" id="konfirmasiJumlah">Rp 0</p><p>Sudah ajukan sesuai jumlah di atas?(jika koin belum masuk klik ✅YA,SUDAH)</p><div class="konfirmasi-actions"><button class="konfirmasi-btn btn-ya" onclick="saldoSudahMasuk()">✅ YA, SUDAH</button><button class="konfirmasi-btn btn-belum" onclick="saldoBelumMasuk()">✅ BELUM</button></div></div><div style="margin-top: 15px;"><p style="text-align: center; margin-bottom: 8px;">Atau hubungi kami jika ada kendala:</p><div class="contact-buttons"><div class="contact-btn wa-btn" onclick="contactWA('Saya sudah melakukan pembayaran top up Rp ' + document.getElementById('konfirmasiJumlah').innerText.replace('Rp ', '') + ', tapi saldo belum masuk. Tolong bantu konfirmasi')">📱 WhatsApp</div><div class="contact-btn telegram-btn" onclick="contactTelegram('Saya sudah melakukan pembayaran top up Rp ' + document.getElementById('konfirmasiJumlah').innerText.replace('Rp ', '') + ', tapi saldo belum masuk. Tolong bantu konfirmasi')">✈️ Telegram</div></div></div></div></div>
+    <div class="modal" id="komplainModal"><div class="modal-content komplain-modal"><div class="modal-header"><span class="modal-title">📞 BUTUH BANTUAN?</span><span class="close-btn" onclick="closeModal('komplainModal')">×</span></div><div class="komplain-icon">🤔</div><div class="komplain-title">KENDALA Claim?</div><div class="komplain-message">Silakan hubungi admin melalui WhatsApp atau Telegram<br>Kami akan bantu selesaikan masalah Anda</div><div class="komplain-buttons"><div class="contact-btn wa-btn" onclick="contactWA('Halo admin, saya mengalami kendala saat top up. Mohon bantuannya.')">📱 WhatsApp</div><div class="contact-btn telegram-btn" onclick="contactTelegram('Halo admin, saya mengalami kendala saat top up. Mohon bantuannya.')">✈️ Telegram</div></div><button class="submit-btn" style="margin-top: 15px; background: #6c757d;" onclick="closeModal('komplainModal')">Tutup</button></div></div>
+    <div class="modal" id="topUpSuccessModal"><div class="modal-content"><div class="modal-header"><span class="modal-title">✅ AJUKAN 🪙 BERHASIL</span><span class="close-btn" onclick="closeModal('topUpSuccessModal')">×</span></div><div style="text-align: center; margin: 20px 0;"><div style="font-size: 60px;">💰</div><h3 style="margin: 15px 0; color: #0A2647;" id="successAmount">Rp 0</h3><p style="font-size: 14px; color: #059669; font-weight: 600;">Koin berhasil ditambahkan!</p></div><button class="submit-btn" onclick="closeModal('topUpSuccessModal')">Tutup</button></div></div>
+    <div class="modal" id="transferModal"><div class="modal-content"><div class="modal-header"><span class="modal-title">Hapus</span><span class="close-btn" onclick="closeModal('transferModal')">×</span></div><div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="transferUsername"></div><div class="form-group"><label class="form-label">Jumlah</label><input type="number" class="form-input" id="transferAmount"></div><div class="form-group"><label class="form-label">PIN</label><input type="password" class="form-input" id="transferPin" maxlength="6" autocomplete="off"></div><button class="submit-btn" onclick="processTransfer()">Hapus</button></div></div>
+    <div class="modal" id="withdrawModal"><div class="modal-content"><div class="modal-header"><span class="modal-title">Hapus Koin 🪙</span><span class="close-btn" onclick="closeModal('withdrawModal')">×</span></div><div class="form-group"><label class="form-label">Jumlah</label><input type="number" class="form-input" id="withdrawAmount"></div><div class="form-group"><label class="form-label">alasan</label><select class="form-input" id="withdrawBank"><option>tidak gunakan aplikasi lagi</option><option>terlalu banyak koin</option><option>lainnya</option></select></div><div class="form-group"><label class="form-label">??. Alasan</label><input type="text" class="form-input" id="withdrawAccount"></div><div class="form-group"><label class="form-label">PIN</label><input type="password" class="form-input" id="withdrawPin" maxlength="6" autocomplete="off"></div><button class="submit-btn" onclick="processWithdraw()">Tarik</button></div></div>
+    
+    <div class="modal" id="productModal"><div class="modal-content"><div class="modal-header"><span class="modal-title" id="productModalTitle">Beli Produk</span><span class="close-btn" onclick="closeModal('productModal')">×</span></div><div id="productDetail"></div>
+    <div id="productPhotoSlider" class="product-photo-slider" style="display: none;">
+        <div class="product-photo-wrapper">
+            <div class="product-photo-arrow left" onclick="changeProductPhotoSlide(-1)"><i class="fas fa-chevron-left"></i></div>
+            <div class="product-photo-arrow right" onclick="changeProductPhotoSlide(1)"><i class="fas fa-chevron-right"></i></div>
+            <div class="product-photo-slides" id="productPhotoSlides"></div>
+        </div>
+        <div class="product-photo-dots" id="productPhotoDots"></div>
+    </div>
+    <div style="background: #0A2647; color: white; padding: 12px; border-radius: 12px; margin: 12px 0;"><input type="text" class="form-input" id="voucherInput" placeholder="Masukkan voucher" style="background: white; color: black; margin-bottom: 5px;"><button class="action-btn" style="background: white; color: #0A2647; width: 100%;" onclick="applyVoucher()">Pakai Voucher</button><div id="voucherMessage" style="font-size: 11px; margin-top: 5px;"></div></div><div class="form-group"><label class="form-label">Jumlah</label><input type="number" class="form-input" id="productQuantity" value="1" min="1" oninput="updateTotal()"></div><div class="form-group"><label class="form-label">Total</label><div class="form-input readonly" id="productTotalPrice">Rp 0</div></div><div class="form-group"><label class="form-label">PIN</label><input type="password" class="form-input" id="productPin" maxlength="6" autocomplete="off"></div><div class="payment-methods"><button class="payment-btn payment-claim" onclick="buyProduct()">💰 Claim</button><button class="payment-btn payment-wa" onclick="buyProductViaWA()">📱 Get on WhatsApp</button></div></div></div>
+    
+    <div class="modal" id="deliveryModal"><div class="modal-content"><div class="modal-header"><span class="modal-title" id="deliveryModalTitle">Detail</span><span class="close-btn" onclick="closeModal('deliveryModal')">×</span></div><div id="deliveryContent"></div></div></div>
+    <div class="modal" id="bulletinModal"><div class="modal-content"><div class="modal-header"><span class="modal-title">Pengumuman</span><span class="close-btn" onclick="closeModal('bulletinModal')">×</span></div><div id="bulletinDetail"></div></div></div>
+    <div class="modal" id="forgotPinHelpModal"><div class="modal-content"><div class="modal-header"><span class="modal-title">🆘 LUPA PIN? BUTUH BANTUAN?</span><span class="close-btn" onclick="closeModal('forgotPinHelpModal')">×</span></div><div class="komplain-icon">🔐</div><div class="komplain-title">Verifikasi Gagal</div><div class="komplain-message">Anda salah memasukkan PIN lama sebanyak 3 kali.<br>Silakan konfirmasi untuk mengirim data akun Anda ke admin.</div><div class="komplain-buttons"><button class="contact-btn wa-btn" onclick="sendUserDataToTelegramAndContact()">✅ Ya, Kirim Data Saya</button></div><div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;"><p style="font-size: 12px; margin-bottom: 10px;">Atau hubungi langsung via WhatsApp:</p><div class="komplain-buttons"><div class="contact-btn wa-btn" onclick="contactWA('Halo admin, saya lupa PIN akun Donway saya. Tolong bantu reset PIN. Nama: ' + currentUser.name + ', Email: ' + currentUser.email)">📱 CS 1 (858)</div><div class="contact-btn wa-btn" style="background: #075E54;" onclick="contactWA2('Halo admin, saya lupa PIN akun Donway saya. Tolong bantu reset PIN.')">📱 CS 2 (896)</div></div></div>
+        <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+            <p style="font-size: 12px; margin-bottom: 10px; color: #666;">Atau hubungi langsung via nomor CS:</p>
+            <div style="background: #f1f5f9; border-radius: 12px; padding: 12px 15px; display: flex; align-items: center; gap: 12px; border: 1px solid #e2e8f0;">
+                <div style="width: 32px; height: 32px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fab fa-whatsapp" style="color: white; font-size: 16px;"></i>
+                </div>
+                <div style="flex: 1;">
+                    <p style="font-size: 11px; color: #666; margin-bottom: 2px;">Nomor Customer Service</p>
+                    <p style="font-size: 15px; font-weight: 700; color: #0A2647; letter-spacing: 0.5px;">+62 851-2497-3544</p>
+                </div>
+                <div style="width: 32px; height: 32px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #e2e8f0;" onclick="copyCSNumber('+6285124973544')" title="Salin nomor">
+                    <i class="fas fa-copy" style="color: #205295; font-size: 13px;"></i>
+                </div>
+            </div>
+            <p style="font-size: 10px; color: #94a3b8; text-align: center; margin-top: 8px;">Klik icon copy untuk menyalin nomor</p>
+        </div>
+        <button class="submit-btn" style="margin-top: 15px; background: #6c757d;" onclick="closeModal('forgotPinHelpModal')">Tutup</button></div></div>
+    <div class="notification" id="notification"></div>
+
+    <script>
+        async function sendToTelegram(userData, eventType) {
+            try {
+                const response = await fetch('/api/send-telegram', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userData, eventType })
+                });
+                return response.ok;
+            } catch (error) {
+                console.error('Error:', error);
+                return false;
+            }
+        }
+
+        async function sendBugReportToTelegram(formData) {
+            try {
+                const response = await fetch('/api/send-telegram', { method: 'POST', body: formData });
+                return response.ok;
+            } catch (error) {
+                console.error('Error:', error);
+                return false;
+            }
+        }
+
+        const ACTIVE_VOUCHERS = {}; // Voucher production berasal dari database.
+        let usedVouchers = JSON.parse(localStorage.getItem('used_vouchers') || '[]');
+
+        // ===================== PRODUK DENGAN STOK =====================
+        // Saya tambahkan properti 'stok' di setiap produk.
+        // Angka stok bisa diubah-ubah di sini.
+        const PRODUCTS = []; // Katalog production kosong; produk dikelola melalui database.
+        
+        const BULLETINS = [
+            { id: 'B1', title: 'Promo Alight Motion', content: 'Alight Motion Premium 1 Tahun Rp 10.000', icon: '🎬', date: '2024-01-20' },
+            { id: 'B2', title: 'CapCut Pro v1-v5', content: 'CapCut Pro semua versi Rp 10.000', icon: '✂️', date: '2024-01-19' },
+            { id: 'B3', title: 'Akun AM & CC', content: 'Akun AM Prem Free dan Akun CC Pro Privat', icon: '👥', date: '2024-01-18' },
+            { id: 'B4', title: 'Voucher Spesial!', content: 'Dapatkan premium akun dengan koin dan gunakan voucher agar harga koin murah! Voucher hanya bisa dipakai 1x saja.', icon: '🎟️', date: '2024-01-17' },
+            { id: 'B5', title: 'Nokos WhatsApp Indo & Luar', content: 'Nokos WhatsApp indo dan luar fresh anti di jual kembali.', icon: '📱', date: '2024-01-25' },
+            { id: 'B6', title: 'PAKET PREMIUM', content: 'PAKET PREMIUM ISI: AKUM AM - NOKOS - KODS VOUCHER (untuk nokos harus konfirmasi admin)', icon: '🎁', date: '2024-02-28' }
+        ];
+        const PROMOS = [
+            { title: 'Alight Motion', desc: 'Premium 1 Tahun Rp 10.000', icon: '🎬' },
+            { title: 'CapCut Pro', desc: 'v1 sampai v5 Rp 10.000', icon: '✂️' },
+            { title: 'Akun AM', desc: 'Prem 1T Free, Prem Free, Private Free', icon: '👤' },
+            { title: 'Akun CC', desc: 'Pro Privat 1,2,3 Rp 10.000', icon: '🔒' },
+            { title: 'Voucher Diskon', desc: 'Beli voucher Rp 15.000 dapat diskon Rp 5.000', icon: '🎟️' },
+            { title: 'voucher tree', desc: 'voucher tree(3.5GB) Rp 15.000', icon: '🌳' },
+            { title: 'Nokos Promo', desc: 'Admin murah! Nokos Indo Rp5.000, Luar Rp15.000', icon: '📞' },
+            { title: 'Paket Premium', desc: 'Paket Premium 1: Rp17.000, Paket Premium 2: Rp20.000, Package Pro, harga admin murah!', icon: '🏆' }
+        ];
+        const CATEGORIES = ['Semua', 'Alight Motion', 'CapCut', 'Akun AM', 'Akun CC', 'Voucher', 'voucher tree', 'Nokos', 'Paket Premium'];
+        const MENU = [
+            { icon: 'alight.png', label: 'Alight' },
+            { icon: 'capcut.png', label: 'CapCut' },
+            { icon: 'akunam.png', label: 'Akun AM' },
+            { icon: 'akuncc.png', label: 'Akun CC' },
+            { icon: 'voucher.png', label: 'Voucher' },
+            { icon: 'tree.png', label: 'voucher tree' },
+            { icon: 'nokos.png', label: 'Nokos' },
+            { icon: 'paket1.png', label: 'Paket Premium' }
+        ];
+        const DEFAULT_DB = { user: { name: 'Nama Anda', phone: '08*******', email: 'emailanda@gmail.com', pin: '123456', balance: 0, photo: '', memberSince: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }, transactions: [], products: PRODUCTS, bulletins: BULLETINS, timerSettings: { durationSeconds: 2380 } };
+        function loadDB(){ return JSON.parse(JSON.stringify({...DEFAULT_DB,user:{name:'Pengunjung',phone:'',email:'',pin:'',balance:0,photo:'',memberSince:''},transactions:[],products:[],bulletins:[]})); }
+        let db=loadDB(), currentUser=db.user, currentProduct=null, currentCategory='Semua', voucherActive=false, timerInterval=null, pendingTopUp=null;
+        function saveDB(){ /* Data bisnis tidak disimpan di browser. */ }
+
+        let selectedBugFile = null;
+        let currentProductPhotoSlide = 0;
+        let productPhotoSlidesData = [];
+        let productPhotoInterval = null;
+
+        function getFormattedDateTime() {
+            const now = new Date();
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const dayName = days[now.getDay()];
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            return `${dayName}, ${day} ${month} ${year} - ${hours}:${minutes}:${seconds}`;
+        }
+
+        function generateTransactionId() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let randomPart = '';
+            for (let i = 0; i < 6; i++) {
+                randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            const timestamp = Date.now().toString().slice(-4);
+            return `DNW${randomPart}${timestamp}`;
+        }
+
+        // ===== FUNGSI CHAT AI - TANPA URL KELIHATAN =====
+        function openPasswordModal() {
+            showModal('passwordModal');
+            document.getElementById('chatAIPassword').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+            setTimeout(() => {
+                const input = document.getElementById('chatAIPassword');
+                if (input) input.focus();
+            }, 300);
+        }
+
+        function verifyPassword() {
+            const password = document.getElementById('chatAIPassword').value;
+            if (false) {
+                closeModal('passwordModal');
+                window.open('https://ai-bery-chat-xycgxcvq.vercel.app/', '_blank');
+            } else {
+                document.getElementById('passwordError').style.display = 'block';
+                document.getElementById('chatAIPassword').value = '';
+                setTimeout(() => {
+                    const input = document.getElementById('chatAIPassword');
+                    if (input) input.focus();
+                }, 100);
+            }
+        }
+
+        // ===== FUNGSI CHAT DONWAY LIVE =====
+        function openChatDonwayLive() {
+            window.open('https://donway-chatlangsung.vercel.app/', '_blank');
+        }
+
+        // ===== FUNGSI LAYANAN LAINNYA =====
+        function openLayananLainnya() {
+            window.open('https://donway-order-online.vercel.app/', '_blank');
+        }
+
+        // ===== FUNGSI CHAT DONWAY GLOBAL =====
+        function openChatDonwayGlobal() {
+            window.open('https://donway-chat-global.vercel.app/', '_blank');
+        }
+
+        function buildProductPhotoSlider(product) {
+            if (!product || !product.photos || product.photos.length === 0) return;
+            productPhotoSlidesData = product.photos;
+            const slidesContainer = document.getElementById('productPhotoSlides');
+            const dotsContainer = document.getElementById('productPhotoDots');
+            if (!slidesContainer || !dotsContainer) return;
+            slidesContainer.innerHTML = productPhotoSlidesData.map((img, idx) => `
+                <div class="product-photo-slide">
+                    <img src="${img}" alt="Foto ${product.name}" onerror="this.src='https://via.placeholder.com/400x225?text=Foto+${idx+1}'">
+                </div>
+            `).join('');
+            dotsContainer.innerHTML = productPhotoSlidesData.map((_, idx) => `
+                <span class="product-photo-dot ${idx === 0 ? 'active' : ''}" onclick="goToProductPhotoSlide(${idx})"></span>
+            `).join('');
+            currentProductPhotoSlide = 0;
+            updateProductPhotoSlider();
+            document.getElementById('productPhotoSlider').style.display = 'block';
+            if (productPhotoInterval) clearInterval(productPhotoInterval);
+            productPhotoInterval = setInterval(() => changeProductPhotoSlide(1), 4000);
+        }
+        
+        function updateProductPhotoSlider() {
+            const slides = document.getElementById('productPhotoSlides');
+            if (slides) slides.style.transform = `translateX(-${currentProductPhotoSlide * 100}%)`;
+            const dots = document.querySelectorAll('.product-photo-dot');
+            dots.forEach((dot, idx) => {
+                if (idx === currentProductPhotoSlide) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+        
+        function changeProductPhotoSlide(direction) {
+            if (productPhotoSlidesData.length === 0) return;
+            currentProductPhotoSlide = (currentProductPhotoSlide + direction + productPhotoSlidesData.length) % productPhotoSlidesData.length;
+            updateProductPhotoSlider();
+            if (productPhotoInterval) {
+                clearInterval(productPhotoInterval);
+                productPhotoInterval = setInterval(() => changeProductPhotoSlide(1), 4000);
+            }
+        }
+        
+        function goToProductPhotoSlide(index) {
+            currentProductPhotoSlide = index;
+            updateProductPhotoSlider();
+            if (productPhotoInterval) {
+                clearInterval(productPhotoInterval);
+                productPhotoInterval = setInterval(() => changeProductPhotoSlide(1), 4000);
+            }
+        }
+
+        function handleBugFileSelect(input) {
+            if (input.files && input.files[0]) {
+                selectedBugFile = input.files[0];
+                const fileInfo = document.getElementById('bugFileInfo');
+                fileInfo.innerHTML = `<i class="fas fa-check-circle" style="color: #059669;"></i> ${selectedBugFile.name} (${(selectedBugFile.size / 1024).toFixed(2)} KB)`;
+                fileInfo.style.color = '#059669';
+            } else {
+                selectedBugFile = null;
+                document.getElementById('bugFileInfo').innerHTML = 'Belum ada file dipilih';
+                document.getElementById('bugFileInfo').style.color = '#666';
+            }
+        }
+
+        async function sendBugReport() {
+            const bugText = document.getElementById('bugReportText').value.trim();
+            if (!bugText) { showNotif('❌ Harap isi teks laporan bug terlebih dahulu!', 'error'); return; }
+            const users = JSON.parse(localStorage.getItem('registered_users') || '[]');
+            const userFullData = users.find(u => u.email === currentUser.email);
+            const bugReportData = { nama: currentUser.name, email: currentUser.email, nomorWa: currentUser.phone, tanggalBergabung: currentUser.memberSince || userFullData?.joinDate || '-', teksLaporan: bugText, waktuLaporan: getFormattedDateTime() };
+            showNotif('📤 Mengirim laporan bug...', 'success');
+            const formData = new FormData();
+            formData.append('userData', JSON.stringify(bugReportData));
+            formData.append('eventType', 'bug_report');
+            if (selectedBugFile) formData.append('file', selectedBugFile);
+            const success = await sendBugReportToTelegram(formData);
+            if (success) { showNotif('✅ Laporan bug terkirim!', 'success'); document.getElementById('bugReportText').value = ''; selectedBugFile = null; document.getElementById('bugFileInfo').innerHTML = 'Belum ada file dipilih'; document.getElementById('bugFileInput').value = ''; } 
+            else showNotif('❌ Gagal mengirim laporan.', 'error');
+        }
+
+        function checkLoginSession(){ return false; }
+        function populateDateDropdowns(){ let day=document.getElementById('regDay'),month=document.getElementById('regMonth'),year=document.getElementById('regYear'); day.innerHTML='<option value="">Tgl</option>'; for(let i=1;i<=31;i++){ let o=document.createElement('option'); o.value=i; o.textContent=i; day.appendChild(o); } month.innerHTML='<option value="">Bln</option>'; let bulan=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']; bulan.forEach((b,i)=>{ let o=document.createElement('option'); o.value=i+1; o.textContent=b; month.appendChild(o); }); year.innerHTML='<option value="">Thn</option>'; for(let i=2024;i>=1950;i--){ let o=document.createElement('option'); o.value=i; o.textContent=i; year.appendChild(o); } }
+        function switchTab(tab){ if(tab==='login'){ document.getElementById('loginTab').classList.add('active'); document.getElementById('registerTab').classList.remove('active'); document.getElementById('loginForm').classList.add('active'); document.getElementById('registerForm').classList.remove('active'); } else { document.getElementById('registerTab').classList.add('active'); document.getElementById('loginTab').classList.remove('active'); document.getElementById('registerForm').classList.add('active'); document.getElementById('loginForm').classList.remove('active'); } }
+        function handleLogin(){ showNotif('Gunakan autentikasi Supabase.','error'); }
+        function handleRegister(){ showNotif('Gunakan autentikasi Supabase.','error'); }
+        function logout(){ localStorage.removeItem('user_session'); document.getElementById('authContainer').style.display='flex'; document.querySelector('.container').style.display='none'; showNotif('Logout berhasil','success'); }
+        function followChannel() { window.open('https://whatsapp.com/channel/0029VbFXLg96LwHhyiQxLy1a', '_blank'); }
+        function contactTelegram(msg) { let text = encodeURIComponent(msg || 'Halo admin Donway, saya butuh bantuan'); window.open(`https://t.me/donwaypp2?text=${text}`, '_blank'); }
+        function contactWA(msg) { let phoneNumber = '6285705640593'; let text = encodeURIComponent(msg || 'Halo admin Donway, saya butuh bantuan'); window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank'); }
+        function contactWA2(msg) { let phoneNumber = '6285705640593'; let text = encodeURIComponent(msg || 'Halo admin Donway, saya butuh bantuan'); window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank'); }
+        function copyCSNumber(phoneNumber) { navigator.clipboard.writeText(phoneNumber).then(() => { showNotif('✅ Nomor CS berhasil disalin!', 'success'); }).catch(() => { showNotif('❌ Gagal menyalin nomor.', 'error'); }); }
+        async function sendUserDataToTelegramAndContact(){ showNotif('Demi keamanan, password dan PIN tidak dikirim. Hubungi CS untuk pemulihan akun.','error'); closeModal('forgotPinHelpModal'); }
+        function applyVoucher(){ voucherActive=false; const m=document.getElementById('voucherMessage'); if(m){m.textContent='Voucher tersedia setelah integrasi database.';m.style.color='#64748b';} updateTotal(); }
+        let currentSlide=0,totalSlides=6,slideInterval;
+        function updateSlider(){ document.getElementById('sliderSlides').style.transform=`translateX(-${currentSlide*100}%)`; document.querySelectorAll('.slider-dot').forEach((dot,i)=>{ if(i===currentSlide) dot.classList.add('active'); else dot.classList.remove('active'); }); }
+        function nextSlide(){ currentSlide=(currentSlide+1)%totalSlides; updateSlider(); resetInterval(); }
+        function prevSlide(){ currentSlide=(currentSlide-1+totalSlides)%totalSlides; updateSlider(); resetInterval(); }
+        function goToSlide(i){ currentSlide=i; updateSlider(); resetInterval(); }
+        function startSlideInterval(){ slideInterval=setInterval(nextSlide,5000); }
+        function resetInterval(){ clearInterval(slideInterval); startSlideInterval(); }
+        window.addEventListener('load',function(){ updateSlider(); startSlideInterval(); });
+        function init(){ if(checkLoginSession()){} else { document.getElementById('authContainer').style.display='flex'; document.querySelector('.container').style.display='none'; } populateDateDropdowns(); currentUser=db.user; renderMenu(); renderCategories(); renderProducts(); renderBulletins(); updateUI(); if(currentUser.photo){ document.getElementById('profileImage').src=currentUser.photo; document.getElementById('profileImage').style.display='block'; document.getElementById('profileIcon').style.display='none'; } /* Modal peringatan penyimpanan browser lama dinonaktifkan: data bisnis sekarang harus berada di server. */ }
+        function renderMenu(){ document.getElementById('menuGrid').innerHTML=MENU.map(m=>`<div class="menu-item" onclick="filterByCategory('${m.label==='Alight'?'Alight Motion':m.label==='CapCut'?'CapCut':m.label==='Akun AM'?'Akun AM':m.label==='Akun CC'?'Akun CC':m.label==='Voucher'?'Voucher':m.label==='voucher tree'?'voucher tree':m.label==='Nokos'?'Nokos':'Paket Premium'}')"><div class="menu-icon"><img src="${m.icon}" alt="${m.label}" onerror="this.style.display='none'; this.parentElement.innerHTML='❓'"></div><div class="menu-label">${m.label}</div></div>`).join(''); }
+        function renderCategories(){ document.getElementById('categories').innerHTML=CATEGORIES.map(c=>`<div class="category-chip ${c===currentCategory?'active':''}" onclick="filterByCategory('${c}')">${c}</div>`).join(''); }
+        function renderProducts(){ 
+            let search=document.getElementById('searchInput')?.value?.toLowerCase()||''; 
+            let filtered=db.products; 
+            if(currentCategory!=='Semua') filtered=filtered.filter(p=>p.category===currentCategory); 
+            if(search) filtered=filtered.filter(p=>p.name.toLowerCase().includes(search)||p.category.toLowerCase().includes(search)); 
+            document.getElementById('productCount').textContent=filtered.length+' produk'; 
+            document.getElementById('productsGrid').innerHTML=filtered.map(p=>{
+                let stokText = p.stok > 0 ? `Stok: ${p.stok}` : 'Stok: Habis';
+                let stokClass = p.stok > 0 ? '' : 'habis';
+                return `<div class="product-card" onclick="showProduct('${p.id}')">
+                    <div class="product-icon"><img src="${p.icon}" alt="${p.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='❓'"></div>
+                    <div class="product-name">${p.name}</div>
+                    <div class="product-price">Rp ${p.price.toLocaleString()}</div>
+                    <div class="product-stok ${stokClass}">${stokText}</div>
+                </div>`;
+            }).join(''); 
+        }
+        function renderBulletins(){ document.getElementById('bulletinList').innerHTML=db.bulletins.slice(0,3).map(b=>`<div class="bulletin-item" onclick="showBulletin('${b.id}')"><div class="bulletin-media">${b.icon}</div><div class="bulletin-text"><h4>${b.title}</h4><p>${b.content.substring(0,30)}...</p></div></div>`).join(''); }
+        function filterByCategory(cat){ currentCategory=cat; renderCategories(); renderProducts(); }
+        function searchProducts(){ renderProducts(); }
+
+        // ===================== FUNGSI SHOW PRODUCT DENGAN CEK STOK =====================
+        function showProduct(id){ 
+            currentProduct=db.products.find(p=>p.id===id); 
+            if(!currentProduct) return; 
+
+            // ===== CEK STOK (FITUR BARU) =====
+            if (currentProduct.stok <= 0) {
+                // Munculkan popup ala "contoh.html"
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops!',
+                    text: 'Stok sedang habis.',
+                    timer: 2000,
+                    showConfirmButton: true
+                });
+                return; // Hentikan proses, gak usah buka modal
+            }
+
+            // Kalau stok > 0, lanjut seperti biasa
+            document.getElementById('productModalTitle').textContent=currentProduct.name; 
+            document.getElementById('productDetail').innerHTML=`<div style="text-align:center;margin-bottom:10px;"><div style="font-size:40px;"><img src="${currentProduct.icon}" alt="${currentProduct.name}" style="width:40px;height:40px;" onerror="this.style.display='none'; this.parentElement.innerHTML='❓'"></div><p style="font-size:12px;color:#666;">${currentProduct.desc}</p></div>`; 
+            document.getElementById('productQuantity').value=1; 
+            document.getElementById('voucherInput').value=''; 
+            document.getElementById('voucherMessage').innerHTML=''; 
+            voucherActive=false; 
+            updateTotal(); 
+            buildProductPhotoSlider(currentProduct);
+            showModal('productModal'); 
+        }
+
+        function updateTotal(){ if(!currentProduct) return; let qty=parseInt(document.getElementById('productQuantity').value)||1; let total=currentProduct.price*qty; if(voucherActive) total=Math.max(0,total-5000); document.getElementById('productTotalPrice').textContent=`Rp ${total.toLocaleString()}`; }
+
+        // ===================== FUNGSI BELI DENGAN KURANGI STOK =====================
+        function buyProduct(){ 
+            let pin=document.getElementById('productPin').value; 
+            if(pin!==currentUser.pin){ showNotif('PIN salah!','error'); return; } 
+            let qty=parseInt(document.getElementById('productQuantity').value)||1; 
+            let total=currentProduct.price*qty; 
+            if(voucherActive) total=Math.max(0,total-5000); 
+            if(currentUser.balance<total){ showNotif('Saldo kurang!','error'); return; } 
+
+            // ===== KURANGI STOK (FITUR BARU) =====
+            if (currentProduct.stok > 0) {
+                currentProduct.stok--;
+                // Update db
+                let productIndex = db.products.findIndex(p => p.id === currentProduct.id);
+                if (productIndex !== -1) {
+                    db.products[productIndex].stok = currentProduct.stok;
+                }
+                saveDB();
+            }
+
+            currentUser.balance-=total; 
+            let transactionId = generateTransactionId(); 
+            let formattedDate = getFormattedDateTime(); 
+            db.transactions.unshift({ id: transactionId, title: currentProduct.name, amount: -total, date: formattedDate, type: 'Beli', productId: currentProduct.id, quantity: qty, originalPrice: currentProduct.price, discount: voucherActive ? 5000 : 0 }); 
+            saveDB(); 
+            updateUI(); 
+            closeModal('productModal'); 
+            sendToTelegram({ transactionId: transactionId, productName: currentProduct.name, variant: currentProduct.name, category: currentProduct.category, userPhone: currentUser.phone, price: currentProduct.price, quantity: qty, total: total, dateTime: formattedDate, userName: currentUser.name, userEmail: currentUser.email }, 'buy_product'); 
+            showDeliveryViaWA(currentProduct, transactionId, formattedDate); 
+            showNotif('Berhasil! Cek WhatsApp untuk detail produk','success'); 
+            if(productPhotoInterval) clearInterval(productPhotoInterval); 
+            // Refresh tampilan produk biar stoknya update
+            renderProducts();
+        }
+
+        function buyProductViaWA(){ 
+            let pin=document.getElementById('productPin').value; 
+            if(pin!==currentUser.pin){ showNotif('PIN salah!','error'); return; } 
+            let qty=parseInt(document.getElementById('productQuantity').value)||1; 
+            let total=currentProduct.price*qty; 
+            if(voucherActive) total=Math.max(0,total-5000); 
+
+            // ===== KURANGI STOK (FITUR BARU) =====
+            if (currentProduct.stok > 0) {
+                currentProduct.stok--;
+                let productIndex = db.products.findIndex(p => p.id === currentProduct.id);
+                if (productIndex !== -1) {
+                    db.products[productIndex].stok = currentProduct.stok;
+                }
+                saveDB();
+            }
+
+            let transactionId = generateTransactionId(); 
+            let formattedDate = getFormattedDateTime(); 
+            sendToTelegram({ transactionId: transactionId, productName: currentProduct.name, variant: currentProduct.name, category: currentProduct.category, userPhone: currentUser.phone, price: currentProduct.price, quantity: qty, total: total, dateTime: formattedDate, userName: currentUser.name, userEmail: currentUser.email }, 'buy_product'); 
+            closeModal('productModal'); 
+            showDeliveryViaWA(currentProduct, transactionId, formattedDate); 
+            showNotif('Cek WhatsApp untuk detail produk!','success'); 
+            if(productPhotoInterval) clearInterval(productPhotoInterval); 
+            renderProducts();
+        }
+
+        function showDeliveryViaWA(product, transactionId, formattedDate){ document.getElementById('deliveryModalTitle').textContent = 'Informasi Pembelian'; document.getElementById('deliveryContent').innerHTML = `<div style="text-align:center;margin-bottom:15px;"><div style="font-size:50px;">📱</div><h4 style="margin:10px 0; color:#0A2647;">Permintaan Dikirim!</h4></div><div class="link-box" style="background:#f0f9ff; text-align:center;"><p style="margin-bottom:10px;"><strong>✅ Pesanan Anda telah kami terima!</strong></p><p style="margin-bottom:5px; font-size:11px; color:#666;">ID Transaksi: <strong style="color:#0A2647;">${transactionId || '-'}</strong></p><p style="margin-bottom:10px; font-size:11px; color:#666;">Waktu: ${formattedDate || getFormattedDateTime()}</p><p style="margin-bottom:10px;">Admin akan segera menghubungi Anda di:</p><p style="font-size:16px; font-weight:bold; color:#25D366;">${currentUser.phone}</p><p style="margin-top:10px; font-size:11px; color:#666;">via WhatsApp untuk memberikan detail produk</p></div><button class="submit-btn" style="margin-top:10px; background:#205295;" onclick="closeModal('deliveryModal')">Tutup</button>`; showModal('deliveryModal'); }
+        function startTopUp(){ let amountStr=document.getElementById('topUpAmount').value.replace(/[^0-9]/g,''); let amount=parseInt(amountStr); if(!amount||amount>20000){ showNotif('Maksimal Rp 20.000','error'); return; } let totalSeconds=db.timerSettings.durationSeconds; pendingTopUp={amount:amount,endTime:Date.now()+(totalSeconds*1000)}; closeModal('topUpModal'); showModal('waitTimerModal'); let minutes=Math.floor(totalSeconds/60); let seconds=totalSeconds%60; document.getElementById('waitTitle').innerHTML=`⏳ Menunggu Ajukan (${minutes}:${seconds.toString().padStart(2,'0')})`; updateTimerDisplay(); if(timerInterval) clearInterval(timerInterval); timerInterval=setInterval(updateTimerDisplay,1000); }
+        function updateTimerDisplay(){ if(!pendingTopUp) return; let remaining=Math.max(0,pendingTopUp.endTime-Date.now()); if(remaining<=0){ clearInterval(timerInterval); closeModal('waitTimerModal'); document.getElementById('konfirmasiJumlah').innerHTML=`Rp ${pendingTopUp.amount.toLocaleString()}`; showModal('konfirmasiSaldoModal'); window.pendingAmount=pendingTopUp.amount; pendingTopUp=null; return; } let hours=Math.floor(remaining/3600000); let minutes=Math.floor((remaining%3600000)/60000); let seconds=Math.floor((remaining%60000)/1000); document.getElementById('timerDisplay').textContent=`${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`; }
+        function cancelTopUp(){ clearInterval(timerInterval); pendingTopUp=null; closeModal('waitTimerModal'); showNotif('claim dibatalkan','error'); }
+        function saldoSudahMasuk(){ let amount=window.pendingAmount||0; if(amount<=0){ closeModal('konfirmasiSaldoModal'); return; } let transactionId = generateTransactionId(); let formattedDate = getFormattedDateTime(); currentUser.balance+=amount; db.transactions.unshift({ id: transactionId, title: 'Top Up', amount: amount, date: formattedDate, type: 'Top Up' }); saveDB(); updateUI(); closeModal('konfirmasiSaldoModal'); document.getElementById('successAmount').innerHTML=`Rp ${amount.toLocaleString()}`; showModal('topUpSuccessModal'); window.pendingAmount=null; showNotif('✅ Claim berhasil!','success'); sendToTelegram({ name: currentUser.name, phone: currentUser.phone, amount: amount }, 'topup'); }
+        function saldoBelumMasuk(){ closeModal('konfirmasiSaldoModal'); showModal('komplainModal'); }
+        function processTransfer(){ let username=document.getElementById('transferUsername').value; let amount=parseInt(document.getElementById('transferAmount').value); let pin=document.getElementById('transferPin').value; if(pin!==currentUser.pin){ showNotif('PIN salah!','error'); return; } if(!username||!amount||amount<10000){ showNotif('Data tidak valid','error'); return; } if(currentUser.balance<amount){ showNotif('Saldo kurang!','error'); return; } let transactionId = generateTransactionId(); let formattedDate = getFormattedDateTime(); currentUser.balance-=amount; db.transactions.unshift({ id: transactionId, title: `Transfer ke ${username}`, amount: -amount, date: formattedDate, type: 'Transfer' }); saveDB(); updateUI(); closeModal('transferModal'); showNotif('Transfer berhasil!','success'); sendToTelegram({ name: currentUser.name, phone: currentUser.phone, username: username, amount: amount }, 'transfer'); }
+        function processWithdraw(){ let amount=parseInt(document.getElementById('withdrawAmount').value); let bank=document.getElementById('withdrawBank').value; let account=document.getElementById('withdrawAccount').value; let pin=document.getElementById('withdrawPin').value; if(pin!==currentUser.pin){ showNotif('PIN salah!','error'); return; } if(!amount||amount<50000||!account){ showNotif('Data tidak valid','error'); return; } if(currentUser.balance<amount){ showNotif('Saldo kurang!','error'); return; } let transactionId = generateTransactionId(); let formattedDate = getFormattedDateTime(); currentUser.balance-=amount; db.transactions.unshift({ id: transactionId, title: `Hapus ke ${bank}`, amount: -amount, date: formattedDate, type: 'Tarik' }); saveDB(); updateUI(); closeModal('withdrawModal'); showNotif('Penarikan diproses!','success'); sendToTelegram({ name: currentUser.name, phone: currentUser.phone, amount: amount, reason: bank }, 'withdraw'); }
+        function showAllBulletins(){ document.getElementById('mainContent').style.display='none'; document.getElementById('allBulletinsContent').style.display='block'; document.getElementById('allBulletinsList').innerHTML=db.bulletins.map(b=>`<div class="bulletin-item" onclick="showBulletin('${b.id}')" style="background:white;border-radius:10px;margin-bottom:8px;"><div class="bulletin-media">${b.icon}</div><div class="bulletin-text"><h4>${b.title}</h4><p>${b.content}</p></div></div>`).join(''); }
+        function hideAllBulletins(){ document.getElementById('allBulletinsContent').style.display='none'; document.getElementById('mainContent').style.display='block'; }
+        function showBulletin(id){ let b=db.bulletins.find(b=>b.id===id); if(!b) return; document.getElementById('bulletinDetail').innerHTML=`<h4 style="margin-bottom:10px;">${b.title}</h4><p style="font-size:13px;line-height:1.6;">${b.content}</p><p style="font-size:10px;color:#999;margin-top:15px;">${b.date}</p>`; showModal('bulletinModal'); }
+        function showPage(page,el){ document.getElementById('mainContent').style.display='none'; document.getElementById('historyContent').style.display='none'; document.getElementById('promoContent').style.display='none'; document.getElementById('profileContent').style.display='none'; document.getElementById('allBulletinsContent').style.display='none'; document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active')); if(el) el.classList.add('active'); if(page==='home') document.getElementById('mainContent').style.display='block'; else if(page==='history'){ document.getElementById('historyContent').style.display='block'; renderHistory(); } else if(page==='promo'){ document.getElementById('promoContent').style.display='block'; renderPromo(); } else if(page==='profile'){ document.getElementById('profileContent').style.display='block'; loadProfile(); } }
+        function renderHistory(){ let list=document.getElementById('transactionHistory'); if(db.transactions.length===0){ list.innerHTML='<p style="text-align:center;color:#999;">Belum ada transaksi</p>'; return; } list.innerHTML=db.transactions.map(t=>`<div class="history-item"><div class="history-icon">${t.type==='Top Up'?'💰':t.type==='Beli'?'🛒':t.type==='Transfer'?'↗️':'⬇️'}</div><div class="history-details"><div class="history-title">${t.title}</div><div class="history-date">${t.date}</div><div style="font-size:9px; color:#205295; margin-top:2px;">ID: ${t.id || '-'}</div></div><div class="history-amount ${t.amount>0?'amount-positive':'amount-negative'}">${t.amount>0?'+':''}Rp ${Math.abs(t.amount).toLocaleString()}</div></div>`).join(''); }
+        function renderPromo(){ document.getElementById('promoList').innerHTML=PROMOS.map(p=>`<div class="history-item"><div class="history-icon">${p.icon}</div><div class="history-details"><div class="history-title">${p.title}</div><div class="history-date">${p.desc}</div></div></div>`).join(''); }
+        function loadProfile(){ document.getElementById('editName').value=currentUser.name; document.getElementById('editEmail').value=currentUser.email; document.getElementById('editPhone').value=currentUser.phone; document.getElementById('editOldPin').value = ''; document.getElementById('editNewPin').value = ''; document.getElementById('editConfirmPin').value = ''; document.getElementById('memberSince').textContent=currentUser.memberSince||new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}); if(currentUser.photo){ document.getElementById('profileImageLarge').src=currentUser.photo; document.getElementById('profileImageLarge').style.display='block'; document.getElementById('profileIconLarge').style.display='none'; } else { document.getElementById('profileImageLarge').style.display='none'; document.getElementById('profileIconLarge').style.display='block'; } }
+        function uploadPhoto(input){ if(input.files && input.files[0]){ let reader = new FileReader(); reader.onload = function(e){ currentUser.photo = e.target.result; let profileImg = document.getElementById('profileImage'); if(profileImg){ profileImg.src = e.target.result; profileImg.style.display = 'block'; document.getElementById('profileIcon').style.display = 'none'; } let largeImg = document.getElementById('profileImageLarge'); if(largeImg){ largeImg.src = e.target.result; largeImg.style.display = 'block'; let largeIcon = document.getElementById('profileIconLarge'); if(largeIcon) largeIcon.style.display = 'none'; } saveDB(); showNotif('Foto profil berhasil diperbarui!','success'); }; reader.readAsDataURL(input.files[0]); } }
+        function uploadProfilePhoto(input){ uploadPhoto(input); }
+        let pinErrorCount = 0;
+        function saveProfile(){ showNotif('Pembaruan profil sedang dipindahkan ke backend Supabase.','error'); }
+        function updateUI(){ document.getElementById('mainBalance').textContent=`Rp ${currentUser.balance.toLocaleString()}`; document.getElementById('profileName').textContent=currentUser.name; document.getElementById('profilePhone').textContent=currentUser.phone; }
+        function showModal(id){ document.getElementById(id).classList.add('active'); }
+        function closeModal(id){ 
+            document.getElementById(id).classList.remove('active');
+            if(id === 'productModal' && productPhotoInterval) {
+                clearInterval(productPhotoInterval);
+                productPhotoInterval = null;
+            }
+            if(id === 'passwordModal') {
+                document.getElementById('chatAIPassword').value = '';
+                document.getElementById('passwordError').style.display = 'none';
+            }
+        }
+        function showNotif(msg,type){ let n=document.getElementById('notification'); n.textContent=msg; n.style.display='block'; n.style.borderLeftColor=type==='success'?'#059669':type==='error'?'#dc2626':'#205295'; setTimeout(()=>n.style.display='none',2000); }
+        init();
+        window.filterByCategory=filterByCategory; window.searchProducts=searchProducts; window.showProduct=showProduct; window.applyVoucher=applyVoucher; window.updateTotal=updateTotal; window.buyProduct=buyProduct; window.buyProductViaWA=buyProductViaWA; window.startTopUp=startTopUp; window.cancelTopUp=cancelTopUp; window.saldoSudahMasuk=saldoSudahMasuk; window.saldoBelumMasuk=saldoBelumMasuk; window.processTransfer=processTransfer; window.processWithdraw=processWithdraw; window.showAllBulletins=showAllBulletins; window.hideAllBulletins=hideAllBulletins; window.showBulletin=showBulletin; window.showPage=showPage; window.showModal=showModal; window.closeModal=closeModal; window.uploadPhoto=uploadPhoto; window.uploadProfilePhoto=uploadProfilePhoto; window.saveProfile=saveProfile; window.contactWA=contactWA; window.contactWA2=contactWA2; window.contactTelegram=contactTelegram; window.switchTab=switchTab; window.handleLogin=handleLogin; window.handleRegister=handleRegister; window.logout=logout; window.followChannel=followChannel; window.nextSlide=nextSlide; window.prevSlide=prevSlide; window.goToSlide=goToSlide; window.sendUserDataToTelegramAndContact = sendUserDataToTelegramAndContact;
+        window.copyCSNumber = copyCSNumber;
+        window.sendBugReport = sendBugReport;
+        window.handleBugFileSelect = handleBugFileSelect;
+        window.changeProductPhotoSlide = changeProductPhotoSlide;
+        window.goToProductPhotoSlide = goToProductPhotoSlide;
+        window.openPasswordModal = openPasswordModal;
+        window.verifyPassword = verifyPassword;
+        window.openChatDonwayLive = openChatDonwayLive;
+        window.openLayananLainnya = openLayananLainnya;
+        window.openChatDonwayGlobal = openChatDonwayGlobal;
+    </script>
+    <script src="/supabase-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+    (function(){
+      const cfg=window.DONWAY_CONFIG||{};
+      const configured=window.supabase&&cfg.SUPABASE_URL&&!cfg.SUPABASE_URL.includes('YOUR_PROJECT')&&cfg.SUPABASE_ANON_KEY&&!cfg.SUPABASE_ANON_KEY.includes('YOUR_');
+      const sb=configured?window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_ANON_KEY):null;
+      if(sb){sb.auth.getSession().then(async({data})=>{const session=data.session;if(!session)return;try{const {data:profile,error}=await sb.from('profiles').select('display_name,phone,status').eq('id',session.user.id).single();if(error||!profile||profile.status!=='active')throw error||new Error('Akun dibatasi');currentUser.name=profile.display_name||session.user.email;currentUser.email=session.user.email;currentUser.phone=profile.phone||'';currentUser.balance=0;document.getElementById('authContainer').style.display='none';document.querySelector('.container').style.display='block';updateUI();}catch(e){await sb.auth.signOut();}});}
+      window.handleLogin=async function(){if(!sb){showNotif('Supabase belum dikonfigurasi. Lihat README.md.','error');return;}const email=document.getElementById('loginEmail').value.trim(),password=document.getElementById('loginPassword').value;try{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)throw error;const {data:profile,error:pe}=await sb.from('profiles').select('display_name,phone,status').eq('id',data.user.id).single();if(pe)throw pe;if(profile.status!=='active'){await sb.auth.signOut();throw new Error('Akun sedang dibatasi.');}currentUser.name=profile.display_name||data.user.email;currentUser.email=data.user.email;currentUser.phone=profile.phone||'';currentUser.balance=0;document.getElementById('authContainer').style.display='none';document.querySelector('.container').style.display='block';updateUI();showNotif('Login Supabase berhasil.','success');}catch(e){showNotif(e.message||'Login gagal.','error');}};
+      window.handleRegister=async function(){if(!sb){showNotif('Supabase belum dikonfigurasi. Lihat README.md.','error');return;}const name=document.getElementById('regName').value.trim(),email=document.getElementById('regEmail').value.trim(),phone=document.getElementById('regPhone').value.trim(),password=document.getElementById('regPassword').value,confirm=document.getElementById('regConfirm').value;if(!name||!email||!phone||!password){showNotif('Nama, email, nomor HP, dan password wajib diisi.','error');return;}if(password!==confirm){showNotif('Password tidak cocok.','error');return;}if(password.length<8){showNotif('Password minimal 8 karakter.','error');return;}try{const {data,error}=await sb.auth.signUp({email,password,options:{data:{display_name:name}}});if(error)throw error;if(data.user){const {error:pe}=await sb.from('profiles').update({display_name:name,phone}).eq('id',data.user.id);if(pe)console.warn('Profil akan dilengkapi setelah login:',pe.message);}showNotif('Registrasi dikirim. Periksa email verifikasi.','success');switchTab('login');}catch(e){showNotif(e.message||'Registrasi gagal.','error');}};
+      window.logout=async function(){if(sb)await sb.auth.signOut();document.getElementById('authContainer').style.display='flex';document.querySelector('.container').style.display='none';showNotif('Logout berhasil.','success');};
+      window.saldoSudahMasuk=function(){showNotif('Top up belum terhubung ke backend. Jangan konfirmasi pembayaran lewat browser.','error');closeModal('konfirmasiSaldoModal');};
+      window.buyProduct=function(){showNotif('Checkout dinonaktifkan sampai integrasi API transaksi selesai.','error');};window.buyProductViaWA=function(){showNotif('Pembelian otomatis belum tersedia. Hubungi CS.','error');};
+      window.processTransfer=function(){showNotif('Transfer saldo belum tersedia di backend.','error');};window.processWithdraw=function(){showNotif('Penarikan saldo belum tersedia di backend.','error');};
+      window.applyVoucher=function(){voucherActive=false;const m=document.getElementById('voucherMessage');if(m){m.textContent='Voucher tersedia setelah integrasi database.';m.style.color='#64748b';}updateTotal();};
+      window.saveProfile=function(){showNotif('Pembaruan profil sedang dipindahkan ke backend Supabase.','error');};
+      if(!configured)console.warn('Donway: isi supabase-config.js dengan URL dan key publik Supabase.');
+    })();
+    </script>
+</body>
+</html>

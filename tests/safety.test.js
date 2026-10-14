@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+const html=await readFile(new URL('../index.html',import.meta.url),'utf8');
+const telegram=await readFile(new URL('../api/send-telegram.js',import.meta.url),'utf8');
+const legacyTelegram=await readFile(new URL('../send-telegram.js',import.meta.url),'utf8');
+const sql=await readFile(new URL('../supabase/migrations/202610140001_initial_schema.sql',import.meta.url),'utf8');
+test('legacy Telegram endpoint is disabled',()=>{assert.match(telegram,/status\(410\)/);assert.doesNotMatch(telegram,/TELEGRAM_BOT_TOKEN/);assert.match(legacyTelegram,/status\(410\)/)});
+test('catalog is empty in shipped frontend',()=>{assert.match(html,/const PRODUCTS = \[\];/)});
+test('legacy admin password is not present',()=>{assert.doesNotMatch(html,/admin92839/);assert.doesNotMatch(html,/DonwayChat109/)});
+test('schema has no demo seed and enables RLS',()=>{assert.match(sql,/alter table public\.wallets enable row level security/);assert.doesNotMatch(sql,/insert into public\.products\s*\(/i)});
+test('admin is assigned by database role, not email',async()=>{const api=await readFile(new URL('../api/_lib/supabase.js',import.meta.url),'utf8');assert.match(api,/profile\.role!=='admin'/);assert.doesNotMatch(api,/admin@gmail\.com/)});
